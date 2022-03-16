@@ -2,25 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
       content="Onboardings Video for Creators and Collectors on XCP"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="apple-touch-icon" href="/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
+      Notice the use of  in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      Unlike "/favicon.ico" or "favicon.ico", "/favicon.ico" will
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
@@ -40,6 +40,26 @@
 </script>    
   </head>
   <body>
+<style>
+  .icon-list {
+  padding-left: 0;
+  list-style: none;
+}
+.icon-list li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: .25rem;
+}
+.icon-list li::before {
+  display: block;
+  flex-shrink: 0;
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: .5rem;
+  content: "";
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23212529' viewBox='0 0 16 16'%3E%3Cpath d='M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z'/%3E%3C/svg%3E") no-repeat center center / 100% auto;
+}
+</style>   
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <header>
       <div class="collapse bg-dark" id="navbarHeader">
@@ -70,16 +90,26 @@
       </div>
     </header>
 <main>
-  <section class="py-5 text-center container">
-    <div class="row py-lg-5">
+  <section class="pt-5 text-center container">
+    <div class="row py-1">
       <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw-light"><i class="fa-duotone fa-robot"></i>&nbsp;<i class="fa-duotone fa-heart"></i>&nbsp;<i class="fa-duotone fa-mug"></i></h1>
-        <p class="lead text-muted">Below are quick video tutorials to help onboard Collectors and Creators to the Counterparty/BTC NFT Space</p>
-        <p class="text-muted">After watching the videos below you will be able to create a XCP wallet to collect NFTs or if you are a Creator create and sell NFTs</p>        
-        <p class="text-muted">Verified XCP Dispenser List: <a style="text-decoration:none;" href="/xcp">Link <i class="fa-duotone fa-arrow-right-arrow-left"></i></a></p>                
+        <h1 class="fw-light"><i class="fa-duotone fa-robot"></i>&nbsp;<i class="fa-duotone fa-heart"></i>&nbsp;<i class="fa-duotone fa-mug"></i></h1>        
+        <p class="text-muted"><span class="badge bg-secondary">New</span> Full Creator Walkthru Start to Finish <a style="text-decoration:none;" href="/CreatorFW.html">Link <i class="fa-duotone fa-arrow-right-arrow-left"></i></a></p>         
+        <p class="text-muted">Verified XCP Dispenser List: <a style="text-decoration:none;" href="/xcp">Link <i class="fa-duotone fa-arrow-right-arrow-left"></i></a></p>
+        <p class="text-muted">---</p>        
       </div>
     </div>
-  </section>  
+  </section>
+  <section class="py-1 text-center container">
+    <div class="row py-1">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <p class="lead text-muted">Below are quick video tutorials to help onboard Collectors and Creators to the Counterparty/BTC NFT Space</p>
+        <p class="text-muted">After watching the videos below you will be able to create a XCP wallet to collect NFTs or if you are a Creator create and sell NFTs</p>        
+      </div>
+    </div>
+
+  </section>
+
     <div class="album py-5 bg-light">
       <div class="container">
   
@@ -213,6 +243,20 @@
         </div>
       </div>
     </div>
+    <div class="container">
+      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <div class="col-md-4 d-flex align-items-center">
+          <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
+            <i class="fa-duotone fa-robot"></i>
+          </a>
+          <span class="text-muted small">&copy; 2022 Robot Love Coffee</span>
+        </div>
+    
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+          <li class="ms-3"><a href="https://twitter.com/robotlovecoffee" class="text-dark" ><i class="fa-brands fa-twitter"></i></a></li>
+        </ul>
+      </footer>
+    </div>    
   </main>                  
     <div id="root"></div>
     <!--
