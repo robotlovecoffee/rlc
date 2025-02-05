@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <title>Robot Love Coffee</title>
+    <style>
+      .form-text,small {font-size:0.75em ;}
+    </style>     
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+ <main>
+  <div class="container mt-5">
+    <h3>XCP JSON Generator (Basic)</h3>
+    <p>Fill out this form with your XCP Token details, paste in URLs from IPFS or Arweave.</p>
+    <p>Generate JSON, if looks correct Download JSON</p>
+    <p>Upload that file to IPFS or Arweave, get the URL to the uploaded file and mint on XCP.</p>
+    <p><small>(This tool is just to help you create a JSON file based on assets you have already uploaded.)</small></p>    
+    <form id="jsonForm">
+      <div class="mb-2">
+        <label for="asset" class="form-label">Token Name:</label>
+        <input type="text" class="form-control" id="asset" required>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description:</label>
+        <input type="text" class="form-control" id="description">
+        <div  class="form-text">
+          Text Only Description [not required]
+        </div>        
+      </div>
+
+      <div class="mb-3">
+        <label for="pgpsig" class="form-label">PGPSIG (Artist Name):</label>
+        <input type="text" class="form-control" id="pgpsig">
+        <div class="form-text">
+          Artist Name [not required]
+        </div>        
+      </div>
+      <div class="mb-3">
+        <label for="icon" class="form-label">Thumbnail URL (48x48):</label>
+        <input type="url" class="form-control" id="icon">
+        <div  class="form-text">
+        Full Path to IPFS or Arweve pointing to a static 48x48 Thumbnail        
+      </div>                
+      </div>
+
+      <div class="mb-3">
+        <label for="large" class="form-label">Large Image URL:</label>
+        <input type="url" class="form-control" id="large" required>
+        <div class="form-text">
+          Full Path to IPFS or Arweve to a static image or .gif
+        </div>        
+      </div>
+      <div class="mb-3">
+        <label for="hires" class="form-label">HiRes Image URL:</label>
+        <input type="url" class="form-control" id="hires">
+        <div  class="form-text">
+          Full Path to IPFS or Arweve pointing to a HiRes image or .gif [not required]
+        </div>        
+      </div>
+      <div class="mb-4">
+        <label for="mp4" class="form-label">MP4 Video URL:</label>
+        <input type="url" class="form-control" id="mp4">
+        <div  class="form-text">
+          Full Path to IPFS or Arweve pointing to a mp4 Video [not required]
+        </div>        
+  
+      </div>
+
+      <div class="mb-2">
+        <label for="mp3" class="form-label">MP3 Audio URL:</label>
+        <input type="url" class="form-control" id="mp3">
+        <div  class="form-text">
+        [not required]
+        </div>        
+
+      </div>
+
+      <div class="mb-3">
+        <label for="twitter" class="form-label">Twitter URL:</label>
+        <input type="url" class="form-control" id="twitter">
+        <div  class="form-text">
+          Full Path to your Twitter (eg, https://twitter.com/robotlovecoffee) [not required]
+        </div>        
+  
+      </div>
+      <div class="mb-3">
+        <button type="button" class="btn btn-primary" onclick="generateJSON()">Generate JSON</button>
+        <button type="button" class="btn btn-success" onclick="downloadJSON()">Download JSON</button>        
+      </div>
+
+    </form>
+    <!-- Textarea to display generated JSON -->
+    <div class="mb-3">
+      <label for="jsonResult" class="form-label">Generated JSON:</label>
+      <textarea class="form-control" id="jsonResult" rows="10" readonly></textarea>
+    </div>
+
+  </div>
+  </main>                  
+    <div id="root"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+    <script>
+      let generatedJSON = null;
+      let tokenName = null;
+    function generateJSON() {
+      const asset = document.getElementById('asset').value.trim().toUpperCase();
+      const name = document.getElementById('asset').value.trim().toUpperCase();
+      const description = document.getElementById('description').value.trim();            
+      const pgpsig = document.getElementById('pgpsig').value.trim();
+      const icon = document.getElementById('icon').value.trim();
+      const large = document.getElementById('large').value.trim();
+      const mp4 = document.getElementById('mp4').value.trim();
+      const mp3 = document.getElementById('mp3').value.trim();            
+      const hires = document.getElementById('hires').value.trim();
+      const twitter = document.getElementById('twitter').value.trim();
+
+      
+      // Create an object with non-blank elements only
+      const jsonData = {
+        asset: asset,
+        name: name,
+        pgpsig: pgpsig,
+        description: description,        
+        images: []
+      };
+
+      if (icon) {
+        jsonData.images.push({ type: 'icon', data: icon });
+      }
+ 
+      if (large) {
+        jsonData.images.push({ type: 'large', data: large });
+      }
+
+      if (hires) {
+        jsonData.images.push({ type: 'hires', data: hires });
+      }
+
+      if (twitter) {
+        jsonData.social = [{ type: 'twitter', data: twitter }];
+      }
+
+      if (mp4) {
+        jsonData.video = [{ type: 'mp4', data: mp4 }];
+      }
+
+
+      if (mp3) {
+        jsonData.audio = [{ type: 'mp3', data: mp3 }];
+      }
+
+      // Store the generated JSON in a global variable
+      generatedJSON = jsonData;
+      tokenName = asset;
+
+      const jsonString = JSON.stringify(jsonData, null, 2);
+      const jsonResultTextarea = document.getElementById('jsonResult');
+      jsonResultTextarea.value = jsonString;
+  }
+
+    function downloadJSON() {
+      if (!generatedJSON) {
+        alert("Please generate the JSON first.");
+        return;
+      }
+
+      const jsonString = JSON.stringify(generatedJSON, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = tokenName + '.json';
+      document.body.appendChild(a);
+      a.click();
+
+      // Clean up
+      URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    }    
+  </script>
+  </body>
+</html>
