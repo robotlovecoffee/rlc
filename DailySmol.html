@@ -71,6 +71,24 @@
         background: #2980b9;
       }
 
+      /* Menu sections with headers */
+      .menu-section {
+        border-top: 1px solid #333;
+        padding-top: 5px;
+      }
+
+      .menu-header {
+        color: #888;
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        text-transform: uppercase;
+      }
+
+      /* Active button style */
+      .menu button.active {
+        background: #2980b9;
+      }
+
       /* Special style for download button */
       #download-btn {
         border-top: 1px solid #333;
@@ -234,13 +252,25 @@
       <span></span>
       <span></span>
     </div>
-    <!-- Minimal dropdown menu -->
+    <!-- Expanded dropdown menu with timer options -->
     <div class="menu" id="menu">
-      <button data-option="1">1 Image</button>
-      <button data-option="2">2 Images</button>
-      <button data-option="3">3 Images</button>
-      <button data-option="4">4 Images</button>
-      <button data-option="6">6 Images</button>
+      <div>
+        <button data-option="1" class="layout-btn">1 Image</button>
+        <button data-option="2" class="layout-btn active">2 Images</button>
+        <button data-option="3" class="layout-btn">3 Images</button>
+        <button data-option="4" class="layout-btn">4 Images</button>
+        <button data-option="6" class="layout-btn">6 Images</button>
+      </div>
+
+      <div class="menu-section">
+        <div class="menu-header">Timer</div>
+        <button data-time="5000" class="timer-btn">5 Seconds</button>
+        <button data-time="8000" class="timer-btn active">8 Seconds</button>
+        <button data-time="30000" class="timer-btn">30 Seconds</button>
+        <button data-time="60000" class="timer-btn">1 Minute</button>
+        <button data-time="300000" class="timer-btn">5 Minutes</button>
+      </div>
+
       <button id="download-btn">Download HTML</button>
     </div>
 
@@ -250,7 +280,6 @@
 
     <script>
       // Replace these with your actual image URLs - maintained with 5:7 ratio
-      // ];
       const imagesData = [
         "https://arweave.net/8kjUf9dqj7lcapLEy-6wlCO4XeN327EKY9gU3NiL2YI",
         "https://arweave.net/120LHHjKeZdiNrBR2YT1rhpy1xcAuO8CLac9fh7DUYw",
@@ -1329,12 +1358,11 @@
         "https://arweave.net/CvntiKvoiASqJqAfYu5w4KBo_Ptoc8SvHIfKGSBZhVQ",
       ];
 
-      // Default selection: 2 images side by side
-      let numImages = 1;
-
-      // Slideshow settings
-      const slideshowInterval = 8000; // 5 seconds
+      // Default settings
+      let numImages = 2;
+      let slideshowInterval = 8000; // 8 seconds default
       const fadeDuration = 1000; // 1 second fade
+      let slideInterval; // Store the interval reference
 
       const container = document.getElementById("slideshow-container");
       const hamburger = document.getElementById("hamburger");
@@ -1369,16 +1397,51 @@
           menu.classList.remove("show");
         });
 
-      // Menu options
-      menu.querySelectorAll("button").forEach((button) => {
-        if (button.id !== "download-btn") {
-          button.addEventListener("click", (e) => {
-            numImages = Number(e.target.getAttribute("data-option"));
-            menu.classList.remove("show");
-            setupLayout();
-            setRandomImages();
-          });
-        }
+      // Layout buttons
+      menu.querySelectorAll(".layout-btn").forEach((button) => {
+        button.addEventListener("click", (e) => {
+          // Update active state
+          menu
+            .querySelectorAll(".layout-btn")
+            .forEach((btn) => btn.classList.remove("active"));
+          e.target.classList.add("active");
+
+          // Set number of images
+          numImages = Number(e.target.getAttribute("data-option"));
+          setupLayout();
+          setRandomImages();
+
+          // Hide the menu
+          menu.classList.remove("show");
+        });
+      });
+
+      // Timer buttons
+      menu.querySelectorAll(".timer-btn").forEach((button) => {
+        button.addEventListener("click", (e) => {
+          // Update active state
+          menu
+            .querySelectorAll(".timer-btn")
+            .forEach((btn) => btn.classList.remove("active"));
+          e.target.classList.add("active");
+
+          // Set the new interval
+          const newInterval = Number(e.target.getAttribute("data-time"));
+
+          // Only restart if interval actually changed
+          if (newInterval !== slideshowInterval) {
+            slideshowInterval = newInterval;
+
+            // Clear the existing interval
+            clearInterval(slideInterval);
+
+            // Start a new interval
+            slideInterval = setInterval(changeSlides, slideshowInterval);
+          }
+
+          // Hide the menu
+          menu.classList.remove("show");
+        });
       });
 
       // Setup the layout based on the user selection
@@ -1447,7 +1510,7 @@
       // Initialize slideshow
       setupLayout();
       setRandomImages();
-      setInterval(changeSlides, slideshowInterval);
+      slideInterval = setInterval(changeSlides, slideshowInterval);
     </script>
   </body>
 </html>
