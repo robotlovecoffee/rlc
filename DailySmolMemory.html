@@ -7,7 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>DailySmol Memory Game v2</title>
+    <title>DailySmol Memory Game</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
@@ -29,17 +29,32 @@
         background: var(--bg-color);
         color: var(--text-color);
         margin: 0;
-        padding: 10px;
+        padding: 5px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        height: 100vh; /* Fixed height to prevent scroll */
-        overflow: hidden; /* Hide overflow */
+        height: 100vh;
+        overflow: hidden;
         justify-content: space-between;
       }
 
+      /* Controls & Stats Container */
+      .game-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        width: 100%;
+        max-width: 800px;
+        margin-bottom: 20px;
+        flex-shrink: 0;
+        z-index: 10;
+        flex-wrap: wrap;
+      }
+
       h1 {
-        margin: 10px 0;
+        margin: 0;
         font-size: 1.5rem;
         font-weight: 800;
         letter-spacing: -1px;
@@ -48,55 +63,39 @@
         background-clip: text;
         -webkit-text-fill-color: transparent;
         text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        flex-shrink: 0;
-      }
-
-      /* Controls & Stats */
-      .game-header {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        width: 100%;
-        max-width: 600px;
-        margin-bottom: 10px;
-        flex-shrink: 0;
-        z-index: 10;
-        background: rgba(18, 18, 18, 0.8); /* backdrop for visibility */
-        padding-bottom: 10px;
+        white-space: nowrap;
       }
 
       .stats-bar {
         display: flex;
-        gap: 20px;
+        gap: 15px;
         background: rgba(255, 255, 255, 0.05);
-        padding: 8px 20px;
+        padding: 8px 15px;
         border-radius: 50px;
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        white-space: nowrap;
       }
 
       .stat-item {
-        font-size: 1rem;
+        font-size: 0.9rem;
         font-weight: 600;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 5px;
       }
 
       .controls {
         display: flex;
         gap: 10px;
-        flex-wrap: wrap;
-        justify-content: center;
+        align-items: center;
       }
 
       select, button {
         font-family: var(--font-main);
         font-size: 0.9rem;
-        padding: 8px 16px;
-        border-radius: 12px;
+        padding: 8px 12px;
+        border-radius: 8px;
         border: none;
         cursor: pointer;
         transition: all 0.2s ease;
@@ -113,12 +112,12 @@
         background: var(--accent-color);
         color: #000;
         font-weight: 600;
-        box-shadow: 0 4px 15px rgba(187, 134, 252, 0.3);
+        box-shadow: 0 2px 8px rgba(187, 134, 252, 0.3);
       }
 
       button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(187, 134, 252, 0.4);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(187, 134, 252, 0.4);
       }
 
       button.secondary {
@@ -128,24 +127,21 @@
         box-shadow: none;
       }
 
-      button.secondary:hover {
-        background: rgba(187, 134, 252, 0.1);
-      }
-
       /* Grid */
       .grid {
         display: grid;
         grid-gap: 10px;
         justify-content: center;
         perspective: 1000px;
-        margin: auto; /* Center vertically */
+        margin: auto;
         flex-grow: 1;
         align-content: center;
         max-height: 100%;
         overflow-y: auto;
+        width: 100%;
       }
 
-      /* Dynamic grid columns based on difficulty will be set in JS or specific classes */
+      /* Dynamic grid columns based on difficulty */
       .grid.easy { grid-template-columns: repeat(4, 18vw); }
       .grid.medium { grid-template-columns: repeat(6, 13vw); }
       .grid.hard { grid-template-columns: repeat(6, 13vw); }
@@ -158,11 +154,15 @@
         width: 100%;
       }
 
-      /* Max sizes for desktop */
+      /* Desktop overrides */
       @media (min-width: 600px) {
         .grid.easy { grid-template-columns: repeat(4, 100px); }
         .grid.medium { grid-template-columns: repeat(6, 80px); }
         .grid.hard { grid-template-columns: repeat(6, 60px); }
+        
+        .grid.easy .card { width: 100px; }
+        .grid.medium .card { width: 80px; }
+        .grid.hard .card { width: 60px; }
       }
 
       .card-inner {
@@ -225,20 +225,50 @@
         object-fit: cover;
       }
 
-      /* Responsive adjustments */
+      /* Mobile adjustments */
       @media (max-width: 600px) {
-        body { padding: 4px; }
-        h1 { font-size: 1.1rem; margin: 2px 0; }
-        .stats-bar { padding: 4px 12px; gap: 8px; }
-        .game-header { order: 2; margin-bottom: 0; margin-top: 4px; padding-bottom: 2px; gap: 5px; }
+        body { padding: 2px; }
+        
+        /* Compact Footer Bar */
+        .game-header {
+          order: 2;
+          margin: 0;
+          padding: 5px;
+          background: #121212;
+          border-top: 1px solid #333;
+          width: 100%;
+          justify-content: space-between;
+          gap: 5px;
+          flex-wrap: nowrap;
+        }
+
+        h1 { font-size: 1rem; margin-right: 5px; }
+        
+        .stats-bar {
+          padding: 2px 8px;
+          gap: 8px;
+          font-size: 0.8rem;
+          background: transparent;
+          border: none;
+          box-shadow: none;
+        }
+        
+        .stat-item { font-size: 0.8rem; }
+        
         .controls { gap: 5px; }
-        select, button { padding: 6px 12px; font-size: 0.85rem; }
-        .grid { order: 1; }
         
-        /* Adjust grid gaps for very small screens */
-        .grid { grid-gap: 4px; }
+        select, button {
+          padding: 4px 8px;
+          font-size: 0.75rem;
+          height: 28px;
+        }
         
-        /* Ensure hard mode fits */
+        /* Hide text on mobile button if needed, or keep it small */
+        #start-btn { white-space: nowrap; }
+
+        .grid { order: 1; grid-gap: 4px; align-content: center; }
+        
+        /* Ensure hard mode fits vertically */
         .grid.hard { grid-template-columns: repeat(6, 14vw); grid-gap: 2px; }
       }
 
@@ -359,19 +389,8 @@
   <body>
     <canvas id="confetti-canvas"></canvas>
 
-    <h1>DailySmol Memory</h1>
-
     <div class="game-header">
-      <div class="controls">
-        <select id="difficulty-select">
-          <option value="easy">Easy (4x4)</option>
-          <option value="medium" selected>Medium (6x4)</option>
-          <option value="hard">Hard (6x6)</option>
-        </select>
-        <button id="start-btn">New Game</button>
-        <button id="quit-btn" class="secondary" style="display: none;">Quit</button>
-      </div>
-
+      <h1>df match</h1>
       <div class="stats-bar" id="game-stats" style="opacity: 0.5;">
         <div class="stat-item">
           <span>🔄</span> <span id="turn-display">0</span>
@@ -379,6 +398,15 @@
         <div class="stat-item">
           <span>⏱️</span> <span id="time-display">0s</span>
         </div>
+      </div>
+      <div class="controls">
+        <select id="difficulty-select">
+          <option value="easy">Easy (4x4)</option>
+          <option value="medium" selected>Medium (6x4)</option>
+          <option value="hard">Hard (6x6)</option>
+        </select>
+        <button id="start-btn">New</button>
+        <button id="quit-btn" class="secondary" style="display: none;">Quit</button>
       </div>
     </div>
 
