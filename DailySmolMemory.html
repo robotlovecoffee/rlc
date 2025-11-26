@@ -227,16 +227,19 @@
 
       /* Responsive adjustments */
       @media (max-width: 600px) {
-        h1 { font-size: 1.2rem; margin: 5px 0; }
-        .stats-bar { padding: 5px 15px; gap: 10px; }
-        .game-header { order: 2; margin-bottom: 0; margin-top: 10px; } /* Move to bottom */
+        body { padding: 4px; }
+        h1 { font-size: 1.1rem; margin: 2px 0; }
+        .stats-bar { padding: 4px 12px; gap: 8px; }
+        .game-header { order: 2; margin-bottom: 0; margin-top: 4px; padding-bottom: 2px; gap: 5px; }
+        .controls { gap: 5px; }
+        select, button { padding: 6px 12px; font-size: 0.85rem; }
         .grid { order: 1; }
         
         /* Adjust grid gaps for very small screens */
-        .grid { grid-gap: 5px; }
+        .grid { grid-gap: 4px; }
         
         /* Ensure hard mode fits */
-        .grid.hard { grid-template-columns: repeat(6, 14vw); }
+        .grid.hard { grid-template-columns: repeat(6, 14vw); grid-gap: 2px; }
       }
 
       /* Leaderboard */
